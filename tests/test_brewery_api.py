@@ -18,7 +18,7 @@ TYPE = 'micro'
 OFFSET_OR_PAGE = 15
 PER_PAGE = 2
 
-parameters = [
+PARAMETERS = [
     (SINGLE_BREWERY + BREWERY_ID, '', '', brewery_schema),
     (RANDOM, '', '', brewery_schema),
     (LIST_BREWERIES, '', '', brewery_schema),
@@ -34,7 +34,7 @@ parameters = [
     ('', PER_PAGE_PARAMETER, PER_PAGE, brewery_schema)
 ]
 
-description_list = [
+DESCRIPTION_LIST = [
     'Single brewery', 'Random', 'List of breweries', f'Search: {SEARCH_QUERY}',
     f'Autocomplete for: {AUTOCOMPLETE_QUERY}', f'By city: {CITY}', f'By distance from {COORDINATES}',
     f'By name: {NAME}', f'By state: {STATE}', f'By postcode: {POSTCODE}',
@@ -42,19 +42,19 @@ description_list = [
 ]
 
 
-@pytest.mark.parametrize('endpoint, parameter, value, schema', parameters, ids=description_list)
+@pytest.mark.parametrize('endpoint, parameter, value, schema', PARAMETERS, ids=DESCRIPTION_LIST)
 def test_successful_status_code(endpoint, parameter, value, schema):
     response = get(BASE_URL + endpoint, params={parameter: value})
     assert response.status_code == 200
 
 
-@pytest.mark.parametrize('endpoint, parameter, value, schema', parameters, ids=description_list)
+@pytest.mark.parametrize('endpoint, parameter, value, schema', PARAMETERS, ids=DESCRIPTION_LIST)
 def test_content_type_json(endpoint, parameter, value, schema):
     response = get(BASE_URL + endpoint, params={parameter: value})
     assert response.headers['Content-Type'] == 'application/json; charset=utf-8'
 
 
-@pytest.mark.parametrize('endpoint, parameter, value, schema', parameters, ids=description_list)
+@pytest.mark.parametrize('endpoint, parameter, value, schema', PARAMETERS, ids=DESCRIPTION_LIST)
 def test_valid_response_schema(endpoint, parameter, value, schema, _validator):
     response = get(BASE_URL + endpoint, params={parameter: value})
     assert response.json()

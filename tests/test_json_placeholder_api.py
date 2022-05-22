@@ -9,7 +9,7 @@ CREATE_RESOURCE_BODY = {"title": "foo", "body": "bar", "userId": 101}
 UPDATE_RESOURCE_BODY = {"title": "foo", "body": "bar", "userId": 1}
 PATCH_RESOURCE_BODY = {"title": "boo"}
 
-parameters = [
+PARAMETERS = [
     (f'/{RESOURCE_ID}', 'get', {}),
     ('', 'get', {}),
     ('', 'post', CREATE_RESOURCE_BODY),
@@ -18,17 +18,17 @@ parameters = [
     (f'/{RESOURCE_ID}', 'delete', {})
 ]
 
-description_list = [f'Getting a resource by id: {RESOURCE_ID}', 'Listing all resources', 'Creating a resource',
+DESCRIPTION_LIST = [f'Getting a resource by id: {RESOURCE_ID}', 'Listing all resources', 'Creating a resource',
                     'Updating a resource', 'Patching a resource', 'Deleting a resource']
 
 
-@pytest.mark.parametrize('endpoint, method, body', parameters, ids=description_list)
+@pytest.mark.parametrize('endpoint, method, body', PARAMETERS, ids=DESCRIPTION_LIST)
 def test_successful_status_code(endpoint, method, body):
     response = requests.request(method, BASE_POSTS_URL + endpoint, json=body)
     assert response.ok
 
 
-@pytest.mark.parametrize('endpoint, method, body', parameters, ids=description_list)
+@pytest.mark.parametrize('endpoint, method, body', PARAMETERS, ids=DESCRIPTION_LIST)
 def test_valid_response_schema(endpoint, method, body, _validator):
     response = requests.request(method, BASE_POSTS_URL + endpoint, json=body)
     assert_schema(response.json(), schema, _validator)
